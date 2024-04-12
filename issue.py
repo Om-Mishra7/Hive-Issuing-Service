@@ -64,6 +64,10 @@ def retrieve_json_data(unique_id):
 
 app = Flask(__name__)
 
+@app.route("/", methods=["GET"])
+def home_route():
+    return jsonify({"status": "success", "message": "Welcome to CertSecure!"})
+
 
 @app.route("/add-certificate/<unique_id>", methods=["POST"])
 def add_certificate_route(unique_id):
