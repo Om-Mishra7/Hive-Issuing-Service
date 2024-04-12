@@ -55,7 +55,6 @@ def retrieve_json_data(unique_id):
             if (json.loads(op["json"]).get("_id")) == unique_id:
                 data = json.loads(op["json"])
                 return True, data
-        print("Data with the given ID not found!")
     except ContentDoesNotExistsException:
         return False, None
 
