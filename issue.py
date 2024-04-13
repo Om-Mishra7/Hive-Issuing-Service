@@ -19,7 +19,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return str(o)
         elif isinstance(o, datetime):
             return o.isoformat()
-        return super().default(o)
+        return super().default(o)   
 
 
 # Define the hive.io credentials
@@ -70,19 +70,19 @@ def home_route():
 
 @app.route("/add-certificate/<unique_id>", methods=["POST"])
 def add_certificate_route(unique_id):
-    certificate_data = DATABASE["certificates"].find_one({"_id": ObjectId(unique_id)})
+    certificate_data = DATABASE["CERTIFICATES"].find_one({"_id": ObjectId(unique_id)})
     if certificate_data is None:
         return jsonify({"status": "error", "message": "Certificate not found!"})
 
-    if certificate_data["certificate_publishing_status"] != "pending":
+    if certificate_data["certificate_publsihing_status"] != "pending":
         return jsonify(
             {"status": "success", "message": "Certificate already published!"}
         )
 
     if add_certificate(unique_id, json.dumps(certificate_data, cls=CustomJSONEncoder)):
-        DATABASE["certificates"].update_one(
+        DATABASE["CERTIFICATES"].update_one(
             {"_id": ObjectId(unique_id)},
-            {"$set": {"certificate_publishing_status": "published"}},
+            {"$set": {"certificate_publsihing_status": "published"}},
         )
         return jsonify(
             {"status": "success", "message": "Certificate published successfully!"}
@@ -101,4 +101,4 @@ def get_certificate_route(unique_id):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
