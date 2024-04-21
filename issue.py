@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import json
 from datetime import datetime
 from bson import ObjectId
@@ -7,9 +9,9 @@ from beem.account import Account
 from beem.exceptions import ContentDoesNotExistsException
 from flask import Flask, request, jsonify
 
-CLIENT = MongoClient(
-    "mongodb+srv://certsecure-backend:ZeTHoPLKI312F9s3@certsecure-cluster-0.ifc7qmw.mongodb.net/?retryWrites=true&w=majority"
-)
+load_dotenv()
+
+CLIENT = MongoClient(os.environ.get("MONGODB_URI"))
 DATABASE = CLIENT["CERTSECURE-DATABASE"]
 
 
@@ -23,8 +25,8 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 
 # Define the hive.io credentials
-posting_key = "5JjdqmAUvDw3P54UVj24mLWqMQ4X56KZCY23Nn3a6w6suN47s6R"
-account_name = "ommishra"
+posting_key = os.environ.get("HIVE_POSTING_KEY")
+account_name = os.environ.get("HIVE_ACCOUNT_NAME")
 
 # Connect to the Hive blockchain
 steem = Steem(keys=[posting_key])
